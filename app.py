@@ -58,6 +58,7 @@ from aiogram import Bot, Dispatcher
 from dotenv import find_dotenv, load_dotenv
 
 from handlers.handlers_user import user_router
+from handlers.orm_query import callback_router
 
 load_dotenv(find_dotenv())
 
@@ -66,6 +67,7 @@ dp = Dispatcher()
 
 
 dp.include_router(user_router)
+dp.include_router(callback_router)
 
 
 async def main():
