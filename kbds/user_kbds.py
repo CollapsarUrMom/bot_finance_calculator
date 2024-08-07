@@ -1,17 +1,9 @@
-from aiogram.types import KeyboardButtonPollType, ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 
 
-
-menu_kb = ReplyKeyboardMarkup(
-    keyboard= [
-        [
-        KeyboardButton(text='Обработка текста для чтения'),
-        ],
-        [
-        KeyboardButton(text='В разработке')
-        ],
-    ],
-    resize_keyboard= True,
-    input_field_placeholder= 'Ну а что вы хотите!'
+menu_kb = InlineKeyboardMarkup(inline_keyboard=[
+    [InlineKeyboardButton(text='Обработчик текста', callback_data='button1')],
+    [InlineKeyboardButton(text='В разработке!', callback_data='button2')]
+]
 )
