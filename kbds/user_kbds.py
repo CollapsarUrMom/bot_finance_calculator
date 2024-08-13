@@ -1,9 +1,17 @@
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import KeyboardButton
+from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
 
+def get_keyboard(
+    *btns: str,
+    placeholder: str = None,
+    sizes: tuple[int] = (2,),
+):
+    
+    keyboard = ReplyKeyboardBuilder()
 
-menu_kb = InlineKeyboardMarkup(inline_keyboard=[
-    [InlineKeyboardButton(text='Обработчик текста', callback_data='button1')],
-    [InlineKeyboardButton(text='В разработке!', callback_data='button2')]
-]
-)
+    for text in btns:
+        keyboard.add(KeyboardButton(text=text))
+
+    return keyboard.adjust(*sizes).as_markup(
+            resize_keyboard=True, input_field_placeholder=placeholder)
