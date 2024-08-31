@@ -1,4 +1,10 @@
+from aiogram.types import BotCommand
 
+
+private = [
+    BotCommand(command='snake_text', description='Текст змейка'),
+    BotCommand(command='add_file', description='Добавить файл'),
+]
 
 
 async def revers_text(data) -> str:

@@ -2,7 +2,10 @@ from aiogram import F, types, Router
 from aiogram.filters import CommandStart, Command, StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
+from aiogram.methods import GetFile
+from aiogram.types import URLInputFile
 import json
+import os
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -28,16 +31,16 @@ class Check_menu(StatesGroup):
 @user_router.message(Command('menu'))
 @user_router.message(CommandStart())
 async def start_cmd(message: types.Message):
-    await message.answer('Привет пока что я умею только обрабатывать текст, вызови команду меню',
+    await message.answer('Привет, выбери команду',
                         reply_markup=get_keyboard(
-                            'Добавить',
+                            'Пополнить базу данных',
                             'Отмена',
                             placeholder=None,
                             sizes=(2,),
                         ))
 
 
-@user_router.message(StateFilter(None), Command('snake'))
+@user_router.message(StateFilter(None), Command('snake_text'))
 async def task_formation(message: types.Message, state: FSMContext):
     await state.set_state(Snake_text.text_input)
     await message.answer('Вставте необходимый текст')
@@ -55,40 +58,14 @@ async def func_input_text(message: types.Message, state: FSMContext):
     await message.answer('Сработал', reply_markup=types.ReplyKeyboardRemove())
 
 
-@user_router.message(StateFilter(None), Command('send_file'))
+@user_router.message(StateFilter(None), Command('add_file'))
 async def add_json(message: types.Message, state: FSMContext):
     await message.answer('Вставте файл')
     await state.set_state(Check_menu.input_document)
 
 
 @user_router.message(Check_menu.input_document)
-async def sendfile(message: types.document):
-    await user_router.send_message(message.chat_id, "Send me the file")
-
-
-# @user_router.message(F.document)
-# async def a(message: types.Message):
-#     await message.answer('Вижу файл!')
-#     print(type(message.document))
-#     await download_files(message.document)
-
-@user_router.message(F.document)
-async def get_document(message: types.Message):
-    await message.answer('Вижу файл!')
-    name = message.document.file_id #для уникальности файлов
-    path = rf"C:\Users\Alex_job\Documents\Git\bot_finance_calculator\documents\{name}.json" #там создается папка documents, туда и будут сохраняться файлы
-    await message.bot.download(destination_file=path)
-
-
-    # file_info = await message.bot.get_file(message.document.file_id)
-    # print(file_info)
-    # file = await message.bot.download(file_info)
-    # print(file)
-
-
-    # file_info = await message.bot.get_file(message.document.file_id)
-    # downloaded_file = await message.bot.download_file(destination= file_info.file_path)
-    # print(downloaded_file)
-    # with open("C:\\Users\\Alex_job\\Documents\\Git\\bot_finance_calculator\\extract.json", 'r', 'UTF-8') as file_object:
-    #     print(file_object)
-    #     await message.bot.send_message(message, f'Ваш  файл сохранен"')
+async def sendfile(message: types.Message, state: FSMContext):
+    file = await message.bot.get_file(file_id= message.document.file_id)
+    await message.bot.download_file(file_path= file.file_path, destination= 'Check12.json')
+    await state.clear()
