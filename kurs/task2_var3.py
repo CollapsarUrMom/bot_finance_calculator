@@ -1,6 +1,9 @@
 import collections
 
-islands = [3, 2, 5, 2, 5, 2, 5, 3]
+# islands = [3, 2, 5, 2, 5, 2, 5, 3]
+
+islands = [3, 5, 2, 2, 5]
+
 
 n = len(islands)
 
@@ -33,4 +36,4 @@ while queue:
             distance[k] = distance[j] + 1
             queue.append(k)
 
-print(distance[2 * n - 2] // 2)
+print(f"Ответ {distance[2 * n - 2] // 2}")
